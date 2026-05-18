@@ -1,0 +1,30 @@
+<article class="kanban-card">
+    <div class="os-highlight">
+        <span>OS</span>
+        <strong>{{ ordem_item.ordem.num_pedido }}</strong>
+    </div>
+
+    <div class="item-highlight">
+        <strong>{{ ordem_item.item.nome }}</strong>
+        <span>{{ ordem_item.quantidade }} un.</span>
+    </div>
+
+    <div class="kanban-meta">
+        <span>{{ ordem_item.ordem.cliente.nome_cliente }}</span>
+        <small>{{ ordem_item.atualizado_em|date:"d/m/Y H:i" }}</small>
+    </div>
+
+    {% if ordem_item.observacao %}
+        <p class="kanban-note">{{ ordem_item.observacao }}</p>
+    {% endif %}
+
+    <form class="inline-form kanban-form" method="post" action="{% url 'atualizar_fase_item' ordem_item.id_ordem_item %}">
+        {% csrf_token %}
+        <select name="fase">
+            {% for valor, label in ordem_item.FASE_CHOICES %}
+                <option value="{{ valor }}" {% if ordem_item.fase == valor %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">OK</button>
+    </form>
+</article>

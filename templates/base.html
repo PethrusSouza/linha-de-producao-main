@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema OS</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Gestao de Producao</h2>
+        <nav>
+            <a href="{% url 'dashboard' %}">Ordens de Servico</a>
+            <a href="{% url 'painel_producao' %}">Painel de Producao</a>
+            <a href="{% url 'clientes' %}">Clientes</a>
+            <a href="{% url 'itens' %}">Itens/Produtos</a>
+            <a href="{% url 'usuarios' %}">Usuarios</a>
+            <a href="{% url 'logout' %}">SAIR</a>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <div class="topo">
+            <span></span>
+            <div>
+                <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn-logout">Sair</a>
+            </div>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

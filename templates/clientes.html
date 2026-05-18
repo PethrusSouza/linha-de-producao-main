@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Cadastro de Clientes</h1>
+
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid grid-3">
+            <div class="form-group">
+                <label for="{{ form.nome_cliente.id_for_label }}">Nome do Cliente</label>
+                {{ form.nome_cliente }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.cnpj.id_for_label }}">CNPJ</label>
+                {{ form.cnpj }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.endereco.id_for_label }}">Endereco</label>
+                {{ form.endereco }}
+            </div>
+        </div>
+        <button type="submit">Salvar Cliente</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Clientes Cadastrados</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Endereco</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nome_cliente }}</td>
+                    <td>{{ cliente.cnpj }}</td>
+                    <td>{{ cliente.endereco }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Nenhum cliente cadastrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

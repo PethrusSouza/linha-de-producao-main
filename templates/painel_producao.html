@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta http-equiv="refresh" content="10">
+
+<div class="production-header">
+    <div>
+        <h1>Painel de Producao</h1>
+        <p>Ordens em andamento por fase | atualiza a cada 10 segundos</p>
+    </div>
+    <div class="production-actions">
+        <span class="live-indicator">Ao vivo</span>
+        <a class="btn-link" href="{% url 'dashboard' %}">Ordens</a>
+    </div>
+</div>
+
+<div class="kanban">
+    <section class="kanban-column etapa-pre-impressao">
+        <div class="kanban-column-title">
+            <h3>Pre impressao</h3>
+        </div>
+        {% for ordem_item in itens_producao %}
+            {% if ordem_item.fase == "PRE_IMPRESSAO" %}
+                {% include "partials/card_item_producao.html" %}
+            {% endif %}
+        {% endfor %}
+    </section>
+
+    <section class="kanban-column etapa-impressao">
+        <div class="kanban-column-title">
+            <h3>Impressao</h3>
+        </div>
+        {% for ordem_item in itens_producao %}
+            {% if ordem_item.fase == "IMPRESSAO" %}
+                {% include "partials/card_item_producao.html" %}
+            {% endif %}
+        {% endfor %}
+    </section>
+
+    <section class="kanban-column etapa-corte">
+        <div class="kanban-column-title">
+            <h3>Corte</h3>
+        </div>
+        {% for ordem_item in itens_producao %}
+            {% if ordem_item.fase == "CORTE" %}
+                {% include "partials/card_item_producao.html" %}
+            {% endif %}
+        {% endfor %}
+    </section>
+
+    <section class="kanban-column etapa-acabamento">
+        <div class="kanban-column-title">
+            <h3>Acabamento</h3>
+        </div>
+        {% for ordem_item in itens_producao %}
+            {% if ordem_item.fase == "ACABAMENTO" %}
+                {% include "partials/card_item_producao.html" %}
+            {% endif %}
+        {% endfor %}
+    </section>
+
+    <section class="kanban-column etapa-expedicao">
+        <div class="kanban-column-title">
+            <h3>Expedicao</h3>
+        </div>
+        {% for ordem_item in itens_producao %}
+            {% if ordem_item.fase == "EXPEDICAO" %}
+                {% include "partials/card_item_producao.html" %}
+            {% endif %}
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Gestao de Ordens de Servico</h1>
+
+<div class="card">
+    <h3>Nova Ordem de Servico</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid grid-3">
+            <div class="form-group">
+                <label for="{{ form.num_pedido.id_for_label }}">Numero do Pedido</label>
+                {{ form.num_pedido }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.cliente.id_for_label }}">Cliente</label>
+                {{ form.cliente }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.status_geral.id_for_label }}">Status</label>
+                {{ form.status_geral }}
+            </div>
+        </div>
+
+        <div class="order-items-section">
+            <div class="section-header">
+                <h4>Itens da Ordem</h4>
+                <button type="button" class="btn-secondary" id="adicionar-item">Adicionar item</button>
+            </div>
+
+            <div id="itens-da-ordem">
+                <div class="order-item-row">
+                    <div class="form-group">
+                        <label>Item</label>
+                        <select name="itens">
+                            <option value="">Selecione um item</option>
+                            {% for item in itens_catalogo %}
+                                <option value="{{ item.id_item }}">{{ item.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantidade</label>
+                        <input type="number" name="quantidades" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Fase Inicial</label>
+                        <select name="fases">
+                            {% for valor, label in fases_item %}
+                                <option value="{{ valor }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="button" class="btn-remover" onclick="removerLinhaItem(this)">Remover</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit">Gerar Ordem</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Pedidos Recentes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Numero do Pedido</th>
+                <th>Cliente</th>
+                <th>Status</th>
+                <th>Data Criacao</th>
+                <th>Acoes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ordem in ordens %}
+                <tr>
+                    <td>{{ ordem.num_pedido }}</td>
+                    <td>{{ ordem.cliente.nome_cliente }}</td>
+                    <td>{{ ordem.status_geral }}</td>
+                    <td>{{ ordem.data_criacao|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <a class="btn-link" href="{% url 'ordem_detalhe' ordem.num_pedido %}">Abrir</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Nenhuma ordem cadastrada.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function removerLinhaItem(botao) {
+    const linhas = document.querySelectorAll(".order-item-row");
+    if (linhas.length > 1) {
+        botao.closest(".order-item-row").remove();
+    }
+}
+
+document.getElementById("adicionar-item").addEventListener("click", function () {
+    const container = document.getElementById("itens-da-ordem");
+    const primeiraLinha = container.querySelector(".order-item-row");
+    const novaLinha = primeiraLinha.cloneNode(true);
+
+    novaLinha.querySelectorAll("select").forEach(function (select) {
+        select.selectedIndex = 0;
+    });
+    novaLinha.querySelector("input[name='quantidades']").value = 1;
+
+    container.appendChild(novaLinha);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-title">
+    <div>
+        <h1>Ordem {{ ordem.num_pedido }}</h1>
+        <p>{{ ordem.cliente.nome_cliente }} | {{ ordem.status_geral }}</p>
+    </div>
+    <a class="btn-link" href="{% url 'dashboard' %}">Voltar</a>
+</div>
+
+<div class="card">
+    <h3>Adicionar Item a Ordem</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid grid-4">
+            <div class="form-group">
+                <label for="{{ form.item.id_for_label }}">Item</label>
+                {{ form.item }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.quantidade.id_for_label }}">Quantidade</label>
+                {{ form.quantidade }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.fase.id_for_label }}">Fase Inicial</label>
+                {{ form.fase }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.observacao.id_for_label }}">Observacao</label>
+                {{ form.observacao }}
+            </div>
+        </div>
+        <button type="submit">Adicionar Item</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Itens da Ordem</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantidade</th>
+                <th>Fase</th>
+                <th>Observacao</th>
+                <th>Atualizado</th>
+                <th>Alterar Fase</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ordem_item in itens_da_ordem %}
+                <tr>
+                    <td>{{ ordem_item.item.nome }}</td>
+                    <td>{{ ordem_item.quantidade }}</td>
+                    <td><span class="badge fase-{{ ordem_item.fase|lower }}">{{ ordem_item.get_fase_display }}</span></td>
+                    <td>{{ ordem_item.observacao|default:"-" }}</td>
+                    <td>{{ ordem_item.atualizado_em|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <form class="inline-form" method="post" action="{% url 'atualizar_fase_item' ordem_item.id_ordem_item %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="origem" value="ordem">
+                            <select name="fase">
+                                {% for valor, label in ordem_item.FASE_CHOICES %}
+                                    <option value="{{ valor }}" {% if ordem_item.fase == valor %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Salvar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">Nenhum item adicionado a esta ordem.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
