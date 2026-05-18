@@ -76,6 +76,7 @@ O projeto ja tem arquivos basicos para deploy:
 ```text
 Procfile
 runtime.txt
+.python-version
 build.sh
 ```
 
