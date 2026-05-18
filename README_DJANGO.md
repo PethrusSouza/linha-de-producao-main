@@ -89,7 +89,7 @@ bash build.sh
 Comando de start:
 
 ```bash
-gunicorn sistema_os.wsgi:application
+bash start.sh
 ```
 
 Variaveis importantes para configurar na hospedagem:
