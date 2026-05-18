@@ -100,9 +100,14 @@ DEBUG=False
 ALLOWED_HOSTS
 CSRF_TRUSTED_ORIGINS
 DATABASE_URL
+DJANGO_SUPERUSER_USERNAME
+DJANGO_SUPERUSER_EMAIL
+DJANGO_SUPERUSER_PASSWORD
 ```
 
 Para usar PostgreSQL online, configure `DATABASE_URL` com a URL fornecida pela hospedagem. O pacote `psycopg` ja esta no `requirements.txt`.
+
+Em planos sem Shell/Jobs, o deploy cria automaticamente um superusuario se as variaveis `DJANGO_SUPERUSER_USERNAME` e `DJANGO_SUPERUSER_PASSWORD` estiverem configuradas.
 
 ## Fluxo de ordens e producao
 
