@@ -82,7 +82,7 @@ build.sh
 Comando de build:
 
 ```bash
-./build.sh
+bash build.sh
 ```
 
 Comando de start:
