@@ -37,6 +37,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Superusuario '{username}' criado."))
         else:
             changed = False
+            user.set_password(password)
+            changed = True
             if not user.is_staff or not user.is_superuser:
                 user.is_staff = True
                 user.is_superuser = True
